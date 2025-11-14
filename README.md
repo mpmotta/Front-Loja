@@ -43,7 +43,12 @@ Este projeto é **apenas o front-end** e não funcionará sozinho. Ele é 100% d
 
 ### Estrutura de Pastas Esperada
 
-/seu-projeto-frontend/ │ ├── index.html (Página principal) ├── categoria.html (Página de categorias) ├── produto.html (Página de detalhes do produto) │ └── img/ └── no-image.jpg (Imagem padrão para produtos sem foto)
+/seu-projeto-frontend/  
+├── index.html (Página principal) 
+├── categoria.html (Página de categorias)
+├── produto.html (Página de detalhes do produto)
+└── img/ 
+       └── no-image.jpg (Imagem padrão para produtos sem foto)
 
 ### Passos para Execução
 

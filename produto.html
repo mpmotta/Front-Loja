@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #ccc;
       margin: 0;
       padding: 30px;
     }
@@ -116,15 +116,11 @@
           throw new Error("ID do produto não encontrado na URL.");
         }
 
-        const response = await fetch(`http://localhost:8080/API-Loja/api.php/produtos/${productId}`);
+        const response = await fetch(`http://localhost/API-Loja/api.php/produtos/${productId}`);
         
-        // *** INÍCIO DA CORREÇÃO ***
-        // A linha abaixo estava com um erro de sintaxe (aspas quebradas)
         if (!response.ok) {
-          // Esta é a linha corrigida:
           throw new Error(`Erro ao carregar o produto. Status: ${response.status}`);
         }
-        // *** FIM DA CORREÇÃO ***
 
         const produto = await response.json();
 

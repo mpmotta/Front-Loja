@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #ccc;
       margin: 0;
       padding: 20px;
     }
@@ -112,7 +112,7 @@
   <script>
     async function loadProducts() {
       try {
-        const response = await fetch('http://localhost:8080/API-Loja/api.php/produtos/');
+        const response = await fetch('http://localhost/API-Loja/api.php/produtos/');
         if (!response.ok) {
           throw new Error("Erro ao carregar produtos. Status: " + response.status);
         }

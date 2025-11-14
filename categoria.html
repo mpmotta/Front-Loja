@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #ccc;
       margin: 0;
       padding: 20px;
     }
@@ -130,7 +130,7 @@
         titleElement.textContent = decodedCategoryName;
 
         // URL da API com "api.php/"
-        const response = await fetch(`http://localhost:8080/API-Loja/api.php/produtos/categoria/${encodeURIComponent(categoryName)}`);
+        const response = await fetch(`http://localhost/API-Loja/api.php/produtos/categoria/${encodeURIComponent(categoryName)}`);
         
         if (!response.ok) {
           throw new Error(`Erro ao carregar produtos da categoria ${decodedCategoryName}. Status: ${response.status}`);

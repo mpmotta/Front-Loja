@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="product-page-title">Detalhes do Produto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .loading {
+      font-size: 1.5em;
+      text-align: center;
+      color: #777;
+    }
+    .product-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .product-image-gallery {
+      flex: 1;
+      min-width: 300px;
+    }
+    .product-image-gallery img {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+    .product-info {
+      flex: 1.2;
+      min-width: 300px;
+    }
+    .product-info h1 {
+      font-size: 2.2em;
+      font-weight: 600;
+      color: #333;
+      margin-top: 0;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .product-info .price {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #dc3545;
+      margin-bottom: 30px;
+    }
+    .product-info p {
+      font-size: 1.1em;
+      color: #555;
+      line-height: 1.6;
+    }
+    .product-description {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+    }
+    .product-description h2 {
+      font-size: 1.8em;
+      color: #444;
+      margin-bottom: 15px;
+    }
+    .product-description p {
+      font-size: 1em;
+      color: #555;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <a href="javascript:history.back()" class="back-link">← Voltar</a>
+	
+
+    <div id="product-content">
+      <div class="loading">Carregando produto...</div>
+    </div>
+    
+  </div>
+
+
+  <script>
+    async function loadProductDetail() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+          throw new Error("ID do produto não encontrado na URL.");
+        }
+
+        const response = await fetch(`http://localhost:8080/API-Loja/api.php/produtos/${productId}`);
+        
+        // *** INÍCIO DA CORREÇÃO ***
+        // A linha abaixo estava com um erro de sintaxe (aspas quebradas)
+        if (!response.ok) {
+          // Esta é a linha corrigida:
+          throw new Error(`Erro ao carregar o produto. Status: ${response.status}`);
+        }
+        // *** FIM DA CORREÇÃO ***
+
+        const produto = await response.json();
+
+        const container = document.getElementById('product-content');
+        document.getElementById('product-page-title').textContent = produto.nome;
+
+        const imagemNome = (produto.imagem && produto.imagem !== 'no-image.jpg')
+          ? produto.imagem
+          : 'no-image.jpg';
+        const imgSrc = `img/${imagemNome}`;
+
+        const precoFormatado = Number(produto.valor).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        });
+
+        container.innerHTML = `
+          <div class="product-detail">
+            
+            <div class="product-image-gallery">
+              <img src="${imgSrc}" alt="${produto.nome}">
+            </div>
+
+            <div class="product-info">
+              <h1>${produto.nome}</h1>
+              <div class="price">${precoFormatado}</div>
+              
+              <p><strong>Marca:</strong> ${produto.marca}</p>
+              <p><strong>Categoria:</strong> ${produto.categoria}</p>
+              <p><strong>Disponibilidade:</strong> ${produto.disponibilidade == "1" ? "Em estoque" : "Indisponível"}</p>
+            </div>
+          </div>
+
+          <div class="product-description">
+            <h2>Descrição Completa</h2>
+            <p>${produto.descricao}</p>
+          </div>
+        `;
+
+      } catch (e) {
+        document.getElementById('product-content').innerHTML = `
+          <div class="loading" style="color: red;">
+            <strong>Erro ao carregar produto:</strong> ${e.message}
+          </div>
+        `;
+        document.getElementById('product-page-title').textContent = "Erro";
+        console.error(e);
+      }
+    }
+
+    loadProductDetail();
+  </script>
+
+</body>
+</html>
